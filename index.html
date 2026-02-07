@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Backlog Manager</title>
     <style>
-        /* --- СТИЛІ (CSS) --- */
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #1e1e1e;
@@ -24,7 +24,7 @@
 
         h1 { text-align: center; color: #00ff99; margin-bottom: 30px; }
 
-        /* Кнопки */
+
         .btn {
             padding: 10px 20px;
             border: none;
@@ -41,7 +41,7 @@
         .btn-secondary { background-color: #555; color: white; }
         .btn:hover { opacity: 0.8; }
 
-        /* Меню */
+
         #menu-screen {
             display: flex;
             flex-direction: column;
@@ -55,7 +55,7 @@
             font-size: 18px;
         }
 
-        /* Список ігор */
+
         .game-card {
             background-color: #2d2d2d;
             border-left: 5px solid #00ff99;
@@ -76,7 +76,7 @@
             color: #fff;
         }
 
-        /* Форма */
+
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; }
         input, select, textarea {
@@ -86,10 +86,10 @@
             border: 1px solid #555;
             color: white;
             border-radius: 4px;
-            box-sizing: border-box; /* Щоб padding не ламав ширину */
+            box-sizing: border-box; 
         }
 
-        /* Приховування блоків */
+
         .screen { display: none; }
         .active { display: block; }
 
@@ -101,87 +101,83 @@
         <h1>🎮 Game Backlog</h1>
 
         <div id="menu-screen" class="screen active">
-            <button class="btn btn-primary menu-btn" onclick="showLibrary()">📚 Моя Бібліотека</button>
-            <button class="btn btn-success menu-btn" onclick="showAddForm()">➕ Додати Гру</button>
+            <button class="btn btn-primary menu-btn" onclick="showLibrary()">📚 My Library</button>
+            <button class="btn btn-success menu-btn" onclick="showAddForm()">➕ Add game</button>
         </div>
 
         <div id="library-screen" class="screen">
-            <button class="btn btn-secondary" onclick="showMenu()">⬅ Назад в меню</button>
+            <button class="btn btn-secondary" onclick="showMenu()">⬅ Back to menu</button>
             <button class="btn btn-success" onclick="showAddForm()" style="float: right;">+ Додати</button>
-            <h2 style="border-bottom: 1px solid #444; padding-bottom: 10px;">Список ігор</h2>
+            <h2 style="border-bottom: 1px solid #444; padding-bottom: 10px;">Games list</h2>
             <div id="games-list">Loading...</div>
         </div>
 
         <div id="form-screen" class="screen">
-            <h2 id="form-title">Додати нову гру</h2>
+            <h2 id="form-title">Add new game</h2>
             <input type="hidden" id="game-id"> <div class="form-group">
-                <label>Назва гри:</label>
+                <label>Game name:</label>
                 <input type="text" id="title" placeholder="Witcher 3">
             </div>
             <div class="form-group">
-                <label>Жанр:</label>
+                <label>Genre:</label>
                 <input type="text" id="genre" placeholder="RPG">
             </div>
             <div class="form-group">
-                <label>Статус:</label>
+                <label>Status:</label>
                 <select id="status">
-                    <option value="Backlog">Планую (Backlog)</option>
-                    <option value="Playing">Граю (Playing)</option>
-                    <option value="Completed">Пройшов (Completed)</option>
-                    <option value="Dropped">Закинув (Dropped)</option>
+                    <option value="Backlog">Backlog</option>
+                    <option value="Playing">Playing</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Dropped">Dropped</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Рейтинг (0-10):</label>
+                <label>Raiting (0-10):</label>
                 <input type="number" id="rating" min="0" max="10" step="0.5">
             </div>
             <div class="form-group">
-                <label>Коментар:</label>
-                <textarea id="comment" rows="3" placeholder="Ваші враження..."></textarea>
+                <label>Comment:</label>
+                <textarea id="comment" rows="3" placeholder="I think this game..."></textarea>
             </div>
 
-            <button class="btn btn-success" onclick="saveGame()">💾 Зберегти</button>
-            <button class="btn btn-secondary" onclick="showLibrary()">Скасувати</button>
+            <button class="btn btn-success" onclick="saveGame()">💾 Save</button>
+            <button class="btn btn-secondary" onclick="showLibrary()">cancel</button>
         </div>
     </div>
 
 <script>
-        // ⚠️ ВАЖЛИВО: Перевір, чи тут правильний порт (твоя консоль показувала 5187 у помилці, тому я ставлю його)
         const API_URL = 'http://localhost:5187/api/Games'; 
 
-        // --- НАВІГАЦІЯ ---
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
         }
         function showMenu() { showScreen('menu-screen'); }
         
-        // --- 1. READ (ЧИТАННЯ) ---
         async function showLibrary() {
             showScreen('library-screen');
             const listDiv = document.getElementById('games-list');
-            listDiv.innerHTML = '<p>Завантаження...</p>';
+            listDiv.innerHTML = '<p>Loading...</p>';
 
             try {
                 const response = await fetch(API_URL);
                 const games = await response.json();
 
-                listDiv.innerHTML = ''; // Очистити список
+                listDiv.innerHTML = ''; 
                 
                 if (games.length === 0) {
-                    listDiv.innerHTML = '<p>Бібліотека пуста. Додай першу гру!</p>';
+                    listDiv.innerHTML = '<p>Library is empty.Add new game!</p>';
                     return;
                 }
 
                 games.forEach(game => {
                     const card = document.createElement('div');
                     card.className = 'game-card';
-                    // Зверни увагу: я додав ' ' навколо editGame, щоб JSON не ламався
                     card.innerHTML = `
                         <div class="game-info">
                             <h3>${game.title} <span class="status-badge">${game.status}</span></h3>
                             <p>🎭 Жанр: ${game.genre} | ⭐ ${game.rating}/10</p>
-                            <p>💬 ${game.comment || 'Без коментарів'}</p>
+                            <p>💬 ${game.comment || 'No Comments'}</p>
                         </div>
                         <div class="game-actions">
                             <button class="btn btn-primary" onclick='editGame(${JSON.stringify(game)})'>✏️</button>
@@ -191,14 +187,13 @@
                     listDiv.appendChild(card);
                 });
             } catch (error) {
-                listDiv.innerHTML = '<p style="color:red">Помилка з\'єднання з сервером! Перевір порт.</p>';
+                listDiv.innerHTML = '<p style="color:red">Error connecting with the server.Check port!</p>';
                 console.error(error);
             }
         }
 
-        // --- 2. ПІДГОТОВКА ФОРМИ ---
         function showAddForm() {
-            document.getElementById('form-title').innerText = "Додати нову гру";
+            document.getElementById('form-title').innerText = "Add new game";
             document.getElementById('game-id').value = ''; 
             document.getElementById('title').value = '';
             document.getElementById('genre').value = '';
@@ -209,7 +204,7 @@
         }
 
         function editGame(game) {
-            document.getElementById('form-title').innerText = "Редагувати гру";
+            document.getElementById('form-title').innerText = "Update game";
             document.getElementById('game-id').value = game.id;
             document.getElementById('title').value = game.title;
             document.getElementById('genre').value = game.genre;
@@ -219,7 +214,6 @@
             showScreen('form-screen');
         }
 
-        // --- 3. CREATE & UPDATE (ЗБЕРЕЖЕННЯ) ---
         async function saveGame() {
             const id = document.getElementById('game-id').value;
             
@@ -234,7 +228,6 @@
 
             const method = id ? 'PUT' : 'POST';
             
-            // 🔥 ОСЬ ТУТ БУЛА ПОМИЛКА: Тепер ми використовуємо змінну API_URL
             const url = id ? `${API_URL}/${id}` : API_URL;
 
             try {
@@ -247,25 +240,23 @@
                 if (response.ok) {
                     showLibrary(); 
                 } else {
-                    alert('Помилка збереження!');
+                    alert('Error!');
                 }
             } catch (error) {
                 console.error(error);
-                alert('Сервер не відповідає.');
+                alert('Server not responding');
             }
         }
 
-        // --- 4. DELETE (ВИДАЛЕННЯ) ---
         async function deleteGame(id) {
-            if (!confirm('Точно видалити цю гру?')) return;
+            if (!confirm('U sure u want delete this game?')) return;
 
             try {
-                // 🔥 І ТУТ ТЕЖ: Використовуємо змінну
                 await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
                 showLibrary(); 
             } catch (error) {
                 console.error(error);
-                alert('Не вдалося видалити.');
+                alert('Error');
             }
         }
     </script>
