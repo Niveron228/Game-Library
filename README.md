@@ -9,6 +9,7 @@ A RESTful Web API built with **ASP.NET Core** and **Entity Framework Core** to m
 * **Entity Framework Core** (ORM)
 * **SQL Server** (LocalDB)
 * **Swagger / OpenAPI** (Documentation)
+* **HTML / CSS / JS** (Frontend)
 
 ## ✨ Features
 
