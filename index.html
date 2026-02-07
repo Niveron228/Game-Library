@@ -107,7 +107,6 @@
 
         <div id="library-screen" class="screen">
             <button class="btn btn-secondary" onclick="showMenu()">⬅ Back to menu</button>
-            <button class="btn btn-success" onclick="showAddForm()" style="float: right;">+ Додати</button>
             <h2 style="border-bottom: 1px solid #444; padding-bottom: 10px;">Games list</h2>
             <div id="games-list">Loading...</div>
         </div>
@@ -121,6 +120,14 @@
             <div class="form-group">
                 <label>Genre:</label>
                 <input type="text" id="genre" placeholder="RPG">
+            </div>
+            <div class="form-group">
+                <label>Genre:</label>
+                <input type="text" id="genre" placeholder="RPG">
+            </div>
+            <div class="form-group">
+                <label>Platform:</label>
+                <input type="text" id="platform" placeholder="PC / Xbox / PlayStation / Nintendo / SteamDeck / Other">
             </div>
             <div class="form-group">
                 <label>Status:</label>
@@ -176,8 +183,10 @@
                     card.innerHTML = `
                         <div class="game-info">
                             <h3>${game.title} <span class="status-badge">${game.status}</span></h3>
-                            <p>🎭 Жанр: ${game.genre} | ⭐ ${game.rating}/10</p>
+                            <p>🎭 Genre: ${game.genre} | ⭐ ${game.rating}/10</p>
+                            <p>🛠️ Platform: ${game.platform}</p>
                             <p>💬 ${game.comment || 'No Comments'}</p>
+                            <p>📈 Status: ${game.status}</p>
                         </div>
                         <div class="game-actions">
                             <button class="btn btn-primary" onclick='editGame(${JSON.stringify(game)})'>✏️</button>
@@ -197,6 +206,7 @@
             document.getElementById('game-id').value = ''; 
             document.getElementById('title').value = '';
             document.getElementById('genre').value = '';
+            document.getElementById('platform').value = '';
             document.getElementById('status').value = 'Backlog';
             document.getElementById('rating').value = '';
             document.getElementById('comment').value = '';
@@ -208,6 +218,7 @@
             document.getElementById('game-id').value = game.id;
             document.getElementById('title').value = game.title;
             document.getElementById('genre').value = game.genre;
+            document.getElementById('platform').value = game.platform;
             document.getElementById('status').value = game.status;
             document.getElementById('rating').value = game.rating;
             document.getElementById('comment').value = game.comment;
@@ -221,6 +232,7 @@
                 id: id ? parseInt(id) : 0,
                 title: document.getElementById('title').value,
                 genre: document.getElementById('genre').value,
+                platform: document.getElementById('platform').value,
                 status: document.getElementById('status').value,
                 rating: parseFloat(document.getElementById('rating').value) || 0,
                 comment: document.getElementById('comment').value
